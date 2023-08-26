@@ -7,12 +7,8 @@ namespace Splitwise.Controllers;
 [Route("expense")]
 public class ExpenseController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
     private readonly ILogger<ExpenseController> _logger;
+    private readonly AppSettings _appSettings;
 
     public ExpenseController(ILogger<ExpenseController> logger)
     {
@@ -22,6 +18,7 @@ public class ExpenseController : ControllerBase
     [HttpGet(Name = "{id}")]
     public GetExpenseDto Get(string id)
     {
+        throw new Exception("Heelo");
         return new GetExpenseDto()
         {
             Id = id,
