@@ -8,7 +8,6 @@ namespace Splitwise.Controllers;
 public class ExpenseController : ControllerBase
 {
     private readonly ILogger<ExpenseController> _logger;
-    private readonly AppSettings _appSettings;
 
     public ExpenseController(ILogger<ExpenseController> logger)
     {
@@ -18,11 +17,9 @@ public class ExpenseController : ControllerBase
     [HttpGet(Name = "{id}")]
     public GetExpenseDto Get(string id)
     {
-        throw new Exception("Heelo");
         return new GetExpenseDto()
         {
             Id = id,
-            User = new User(),
             Timestamp = DateTime.Now,
         };
     }

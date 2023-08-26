@@ -1,4 +1,5 @@
 using Splitwise;
+using Splitwise.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -10,6 +11,13 @@ builder.Services.AddSwaggerGen();
 var appSettings = new AppSettings();
 builder.Configuration.Bind(appSettings);
 builder.Services.AddSingleton(appSettings);
+AddServices(builder.Services);
+
+void AddServices(IServiceCollection serviceCollection)
+{
+    serviceCollection.AddTransient<IUserService, UserService>();
+    serviceCollection.AddSingleton<IUserRepository, UserRepository>();
+}
 
 var app = builder.Build();
 
