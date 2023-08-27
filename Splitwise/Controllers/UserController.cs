@@ -25,6 +25,7 @@ public class UserController : ControllerBase
         var result = _userService.Create(userCreateDto);
         if (result.IsError)
         {
+            _logger.Log(Microsoft.Extensions.Logging.LogLevel.Error, "can not create", result.Error);
             return new JsonResult(result.Error.Message) {StatusCode = (int) HttpStatusCode.BadRequest};
         }
 
@@ -37,6 +38,7 @@ public class UserController : ControllerBase
         var user = _userService.Get(userId);
         if (user.IsError)
         {
+            _logger.Log(Microsoft.Extensions.Logging.LogLevel.Error, "can not GET");
             return new JsonResult(user.Error) {StatusCode = (int) HttpStatusCode.BadRequest};
         }
 

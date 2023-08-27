@@ -9,6 +9,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var appSettings = new AppSettings();
+builder.Host.ConfigureLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+});
 builder.Configuration.Bind(appSettings);
 builder.Services.AddSingleton(appSettings);
 AddServices(builder.Services);
