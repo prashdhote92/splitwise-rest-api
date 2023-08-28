@@ -1,5 +1,8 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Splitwise.Dto;
+using Splitwise.Services;
+using Splitwise.Shared;
 
 namespace Splitwise.Controllers;
 
@@ -8,19 +11,29 @@ namespace Splitwise.Controllers;
 public class ExpenseController : ControllerBase
 {
     private readonly ILogger<ExpenseController> _logger;
+    private readonly IExpenseService _expenseService;
 
-    public ExpenseController(ILogger<ExpenseController> logger)
+    public ExpenseController(ILogger<ExpenseController> logger, IExpenseService expenseService)
     {
         _logger = logger;
+        _expenseService = expenseService;
     }
 
-    [HttpGet(Name = "{id}")]
-    public GetExpenseDto Get(string id)
+    [HttpGet("{expenseId}")]
+    public JsonResult Get([FromRoute] int expenseId)
     {
-        return new GetExpenseDto()
-        {
-            Id = id,
-            Timestamp = DateTime.Now,
-        };
+        var result = _expenseService.Get(expenseId);
+        return result.IsError
+            ? new JsonResult(result.Error) {StatusCode = (int) HttpStatusCode.BadRequest}
+            : new JsonResult(result.Value.CreateExpenseGetDto()) {StatusCode = (int) HttpStatusCode.OK};
+    }
+
+    [HttpPost]
+    public JsonResult Create([FromBody] ExpensePostDto expensePostDto)
+    {
+        var createResult = _expenseService.Create(expensePostDto);
+        return createResult.IsError
+            ? new JsonResult(createResult.Error) {StatusCode = (int) HttpStatusCode.BadRequest}
+            : new JsonResult($"expense/{createResult.Value}") {StatusCode = (int) HttpStatusCode.OK};
     }
 }

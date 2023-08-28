@@ -20,8 +20,10 @@ AddServices(builder.Services);
 
 void AddServices(IServiceCollection serviceCollection)
 {
-    serviceCollection.AddTransient<IUserService, UserService>();
     serviceCollection.AddSingleton<IUserRepository, UserRepository>();
+    serviceCollection.AddSingleton<IExpenseRepository, ExpenseRepository>();
+    serviceCollection.AddTransient<IUserService, UserService>();
+    serviceCollection.AddTransient<IExpenseService, ExpenseService>();
 }
 
 var app = builder.Build();
