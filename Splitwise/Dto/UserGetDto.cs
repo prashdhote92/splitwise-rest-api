@@ -1,9 +1,9 @@
 namespace Splitwise.Services;
 
-public class UserDto
+public class UserGetDto
 {
     public string Email { get; set; }
-    public string Mobile { get; set; }
+    public string PhoneNumber { get; set; }
     public string Name { get; set; }
     public int Id { get; set; }
 }

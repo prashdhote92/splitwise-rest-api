@@ -24,6 +24,7 @@ void AddServices(IServiceCollection serviceCollection)
     serviceCollection.AddSingleton<IExpenseRepository, ExpenseRepository>();
     serviceCollection.AddTransient<IUserService, UserService>();
     serviceCollection.AddTransient<IExpenseService, ExpenseService>();
+    serviceCollection.AddAutoMapper(x => x.AddProfile<SplitwiseAutoMapperProfile>());
 }
 
 var app = builder.Build();

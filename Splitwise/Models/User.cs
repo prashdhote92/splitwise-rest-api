@@ -2,20 +2,10 @@ namespace Splitwise.Models;
 
 public class User
 {
-    public User(int userId, string email, string name, string mobile, string password)
-    {
-        Id = userId;
-        Email = email;
-        Name = name;
-        Mobile = mobile;
-        Password = password;
-    }
-
-    public int Id { get; }
-    public string Email { get; }
-    public string Name { get; }
-    public string Password { get; }
-    public string Mobile { get; }
-
+    public int Id { get; set; }
+    public string Email { get; set; }
+    public string Name { get; set; }
+    public string Password { get; set; }
+    public string PhoneNumber { get; set; }
     public DateTime CreatedAt { get; set; }
 }

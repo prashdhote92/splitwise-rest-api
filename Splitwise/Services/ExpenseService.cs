@@ -1,3 +1,4 @@
+using AutoMapper;
 using Splitwise.Dto;
 using Splitwise.Models;
 using Splitwise.Shared;
@@ -7,10 +8,12 @@ namespace Splitwise.Services;
 public class ExpenseService : IExpenseService
 {
     private readonly IExpenseRepository _expenseRepository;
+    private readonly IMapper _mapper;
 
-    public ExpenseService(IExpenseRepository expenseRepository)
+    public ExpenseService(IMapper mapper, IExpenseRepository expenseRepository)
     {
         _expenseRepository = expenseRepository;
+        _mapper = mapper;
     }
 
     public ServiceResult<Expense> Get(int expenseId)
@@ -23,7 +26,8 @@ public class ExpenseService : IExpenseService
 
     public ServiceResult<int> Create(ExpensePostDto expensePostDto)
     {
-        var expense = expensePostDto.CreateExpense(_expenseRepository.GetNextId());
+        var expense = _mapper.Map<Expense>(expensePostDto);
+        expense.Id = _expenseRepository.GetNextId();
         var expenseId = _expenseRepository.Add(expense);
         return expenseId > -1
             ? new ServiceResult<int>(expense.Id)

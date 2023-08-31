@@ -1,3 +1,4 @@
+using AutoMapper;
 using Splitwise.Dto;
 using Splitwise.Models;
 using Splitwise.Shared;
@@ -7,31 +8,34 @@ namespace Splitwise.Services;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
 
-    public UserService(IUserRepository userRepository)
+    public UserService(IMapper mapper, IUserRepository userRepository)
     {
         _userRepository = userRepository;
+        _mapper = mapper;
     }
 
-    public ServiceResult<int> Create(UserCreateDto userCreateDto)
+    public ServiceResult<int> Create(UserPostDto userPostDto)
     {
         var nextId = _userRepository.GetNextId();
-        var user = userCreateDto.CreateUser(nextId);
+        var user = _mapper.Map<User>(userPostDto);
+        user.Id = nextId;
         var newUserId = _userRepository.CreateUser(user);
         return newUserId > -1
             ? new ServiceResult<int>(newUserId)
             : new ServiceResult<int>(new Error(Constants.UserEmailAlreadyExists));
     }
 
-    public ServiceResult<UserDto> Get(int userId)
+    public ServiceResult<UserGetDto> Get(int userId)
     {
         if (_userRepository.TryGetUserByUserId(userId, out User user))
         {
-            var userDto = user.CreateUserDto();
-            return new ServiceResult<UserDto>(userDto);
+            var userDto = _mapper.Map<UserGetDto>(user);
+            return new ServiceResult<UserGetDto>(userDto);
         }
 
-        return new ServiceResult<UserDto>(new Error(Constants.UserNotFound));
+        return new ServiceResult<UserGetDto>(new Error(Constants.UserNotFound));
     }
 }
 

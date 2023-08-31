@@ -20,9 +20,9 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public JsonResult Create([FromBody, Required] UserCreateDto userCreateDto)
+    public JsonResult Create([FromBody, Required] UserPostDto userPostDto)
     {
-        var result = _userService.Create(userCreateDto);
+        var result = _userService.Create(userPostDto);
         if (result.IsError)
         {
             _logger.Log(Microsoft.Extensions.Logging.LogLevel.Error, "can not create", result.Error);

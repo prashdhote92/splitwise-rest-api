@@ -1,8 +1,8 @@
 using System.Net;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Splitwise.Dto;
 using Splitwise.Services;
-using Splitwise.Shared;
 
 namespace Splitwise.Controllers;
 
@@ -12,11 +12,13 @@ public class ExpenseController : ControllerBase
 {
     private readonly ILogger<ExpenseController> _logger;
     private readonly IExpenseService _expenseService;
+    private readonly IMapper _mapper;
 
-    public ExpenseController(ILogger<ExpenseController> logger, IExpenseService expenseService)
+    public ExpenseController(ILogger<ExpenseController> logger, IMapper mapper, IExpenseService expenseService)
     {
         _logger = logger;
         _expenseService = expenseService;
+        _mapper = mapper;
     }
 
     [HttpGet("{expenseId}")]
@@ -25,7 +27,7 @@ public class ExpenseController : ControllerBase
         var result = _expenseService.Get(expenseId);
         return result.IsError
             ? new JsonResult(result.Error) {StatusCode = (int) HttpStatusCode.BadRequest}
-            : new JsonResult(result.Value.CreateExpenseGetDto()) {StatusCode = (int) HttpStatusCode.OK};
+            : new JsonResult(_mapper.Map<ExpenseGetDto>(result.Value)) {StatusCode = (int) HttpStatusCode.OK};
     }
 
     [HttpPost]
