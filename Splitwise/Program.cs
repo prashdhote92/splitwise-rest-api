@@ -1,5 +1,8 @@
+using Microsoft.EntityFrameworkCore;
 using Splitwise;
+using Splitwise.Repositories;
 using Splitwise.Services;
+using Splitwise.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -8,22 +11,28 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-var appSettings = new AppSettings();
 builder.Host.ConfigureLogging(logging =>
 {
     logging.ClearProviders();
     logging.AddConsole();
 });
-builder.Configuration.Bind(appSettings);
+var appSettings = builder.Configuration.Get<AppSettings>();
 builder.Services.AddSingleton(appSettings);
 AddServices(builder.Services);
+AddDbContext(builder.Services);
+
+void AddDbContext(IServiceCollection services)
+{
+    services.AddDbContext<DataContext>();
+}
 
 void AddServices(IServiceCollection serviceCollection)
 {
-    serviceCollection.AddSingleton<IUserRepository, UserRepository>();
-    serviceCollection.AddSingleton<IExpenseRepository, ExpenseRepository>();
+    serviceCollection.AddTransient<IUserRepository, UserRepository>();
+    serviceCollection.AddTransient<IExpenseRepository, ExpenseRepository>();
     serviceCollection.AddTransient<IUserService, UserService>();
     serviceCollection.AddTransient<IExpenseService, ExpenseService>();
+    serviceCollection.AddDbContext<DataContext>(options => options.UseNpgsql(appSettings.DbConnectionString));
     serviceCollection.AddAutoMapper(x => x.AddProfile<SplitwiseAutoMapperProfile>());
 }
 

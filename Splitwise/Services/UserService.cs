@@ -1,6 +1,7 @@
 using AutoMapper;
 using Splitwise.Dto;
 using Splitwise.Models;
+using Splitwise.Repositories;
 using Splitwise.Shared;
 
 namespace Splitwise.Services;
@@ -16,18 +17,15 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
-    public ServiceResult<int> Create(UserPostDto userPostDto)
+    public ServiceResult<string> Create(UserPostDto userPostDto)
     {
-        var nextId = _userRepository.GetNextId();
         var user = _mapper.Map<User>(userPostDto);
-        user.Id = nextId;
-        var newUserId = _userRepository.CreateUser(user);
-        return newUserId > -1
-            ? new ServiceResult<int>(newUserId)
-            : new ServiceResult<int>(new Error(Constants.UserEmailAlreadyExists));
+        user.Id = Guid.NewGuid().ToString();
+        _userRepository.CreateUser(user);
+        return new ServiceResult<string>(user.Id);
     }
 
-    public ServiceResult<UserGetDto> Get(int userId)
+    public ServiceResult<UserGetDto> Get(string userId)
     {
         if (_userRepository.TryGetUserByUserId(userId, out User user))
         {
@@ -36,52 +34,5 @@ public class UserService : IUserService
         }
 
         return new ServiceResult<UserGetDto>(new Error(Constants.UserNotFound));
-    }
-}
-
-//TODO to be replaced with postgres
-/// <summary>
-/// In memory DB for Users
-/// </summary>
-public interface IUserRepository
-{
-    int CreateUser(User user);
-    bool TryGetUserByUserId(int userId, out User user);
-    int GetNextId();
-}
-
-public class UserRepository : IUserRepository
-{
-    private SortedDictionary<int, User> _userTable;
-
-    public UserRepository()
-    {
-        _userTable = new SortedDictionary<int, User>();
-    }
-
-    private bool IsUserEmailExists(string email)
-    {
-        return _userTable.Values.Any(x => x.Email == email);
-    }
-
-    public bool TryGetUserByUserId(int userId, out User user)
-    {
-        return _userTable.TryGetValue(userId, out user);
-    }
-
-    public int GetNextId()
-    {
-        return _userTable.Keys.LastOrDefault() + 1;
-    }
-
-    public int CreateUser(User user)
-    {
-        if (IsUserEmailExists(user.Email))
-        {
-            return -1;
-        }
-
-        _userTable.Add(user.Id, user);
-        return user.Id;
     }
 }

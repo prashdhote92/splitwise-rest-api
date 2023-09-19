@@ -1,12 +1,22 @@
 # Splitwise App
 
+### `Note: This app is for learning purpose only `
+
 Splitwise is REST Api based application which provides basic functionalities to split the expenses among individuals and groups.
 It is build using C# .NET CORE framework and postgres db.
+
 
 Following Frameworks and technologies are being used
 * C# .NET Core
 * Postgres
 * Fluent Validations
+
+
+### Setting Up App
+* Create Postgres DB with name `splitwiseDb` with username `app_admin` and password as `postgres`
+* Execute following commands to create the table
+    * `dotnet ef migrations add InitialCreate`
+    * `dotnet ef database update`
 
 
 ### Supported APIs

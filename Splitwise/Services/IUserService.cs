@@ -5,6 +5,6 @@ namespace Splitwise.Services;
 
 public interface IUserService
 {
-    ServiceResult<int> Create(UserPostDto userPostDto);
-    ServiceResult<UserGetDto> Get(int userId);
+    ServiceResult<string> Create(UserPostDto userPostDto);
+    ServiceResult<UserGetDto> Get(string userId);
 }

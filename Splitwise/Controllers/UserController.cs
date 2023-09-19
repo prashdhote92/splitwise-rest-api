@@ -33,7 +33,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{userId}")]
-    public JsonResult Get([FromRoute, Required] int userId)
+    public JsonResult Get([FromRoute, Required] string userId)
     {
         var user = _userService.Get(userId);
         if (user.IsError)
