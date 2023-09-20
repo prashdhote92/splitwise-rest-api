@@ -11,6 +11,11 @@ Following Frameworks and technologies are being used
 * Postgres
 * Fluent Validations
 
+### Prerequisite
+
+* Postgres
+  * Install Postgres
+  * Add Postgres and create database with name splitwiseDB
 
 ### Setting Up App
 * Create Postgres DB with name `splitwiseDb` with username `app_admin` and password as `postgres`

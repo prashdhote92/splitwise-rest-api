@@ -1,11 +1,21 @@
+using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+
 namespace Splitwise.Models;
 
+[PrimaryKey(nameof(Id))]
 public class Expense
 {
-    public int Id { get; set; }
+    [Required]
+    public string Id { get; set; }
+    [Required]
     public string Description { get; set; }
+    [Required]
     public int Amount { get; set; }
-    public int[] PaidBy { get; set; }
-    public int[] OwedBy { get; set; }
+    [Required]
+    public string[] PaidBy { get; set; }
+    [Required]
+    public string[] OwedBy { get; set; }
+    [Required]
     public DateTime ProcessedOn { get; set; }
 }

@@ -6,6 +6,6 @@ namespace Splitwise.Services;
 
 public interface IExpenseService
 {
-    ServiceResult<Expense> Get(int expenseId);
-    ServiceResult<int> Create(ExpensePostDto expensePostDto);
+    ServiceResult<Expense> Get(string expenseId);
+    ServiceResult<string> Create(ExpensePostDto expensePostDto);
 }

@@ -22,7 +22,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpGet("{expenseId}")]
-    public JsonResult Get([FromRoute] int expenseId)
+    public JsonResult Get([FromRoute] string expenseId)
     {
         var result = _expenseService.Get(expenseId);
         return result.IsError
