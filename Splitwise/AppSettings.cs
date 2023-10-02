@@ -9,6 +9,8 @@ public class AppSettings
 
     public string DbConnectionString =>
         $"Host={DbConnection.Host}; Database={DbConnection.DbName}; Port={DbConnection.Port}; Username={DbConnection.UserName}; Password={DbConnection.Password}";
+
+    public JwtBearer JwtSetting { get; set; }
 }
 public class Logging
 {
@@ -27,4 +29,11 @@ public class DbConnection
     public string Port { get; set; }
     public string UserName { get; set; }
     public string Password { get; set; }
+}
+
+public class JwtBearer
+{
+    public string Audience { get; set; }
+    public string Issuer { get; set; }
+    public string Key { get; set; }
 }

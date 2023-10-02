@@ -1,22 +1,22 @@
 using System.Net;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Splitwise.Dto;
 using Splitwise.Services;
 
 namespace Splitwise.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("expense")]
 public class ExpenseController : ControllerBase
 {
-    private readonly ILogger<ExpenseController> _logger;
     private readonly IExpenseService _expenseService;
     private readonly IMapper _mapper;
 
-    public ExpenseController(ILogger<ExpenseController> logger, IMapper mapper, IExpenseService expenseService)
+    public ExpenseController(IMapper mapper, IExpenseService expenseService)
     {
-        _logger = logger;
         _expenseService = expenseService;
         _mapper = mapper;
     }

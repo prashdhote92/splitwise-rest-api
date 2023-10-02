@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Splitwise.Dto;
 using Splitwise.Services;
@@ -31,7 +32,7 @@ public class UserController : ControllerBase
 
         return new JsonResult($"/user/{result.Value}") {StatusCode = (int) HttpStatusCode.Created};
     }
-
+    [Authorize]
     [HttpGet("{userId}")]
     public JsonResult Get([FromRoute, Required] string userId)
     {
